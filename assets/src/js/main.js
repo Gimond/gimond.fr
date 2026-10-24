@@ -5,9 +5,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
   mouse_trail.init();
 });
 
-document.fonts.onloadingdone = function (fontFaceSetEvent) {
-  document.body.classList += " fontsLoaded";
-};
+// Intro animation: wait for fonts and portrait, then let the initial state
+// paint once (double rAF) so the transitions always play from the start
+const portrait = document.querySelector(".face img");
+Promise.all([
+  document.fonts.load('bold 1em "Playfair Display"'),
+  document.fonts.load('1em "Roboto"'),
+  portrait ? portrait.decode().catch(() => {}) : null,
+])
+  .catch(() => {})
+  .then(() => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.body.classList.add("fontsLoaded");
+      });
+    });
+  });
 
 // Scroll to
 const scrollto_links = document.querySelectorAll(".scrollto");
