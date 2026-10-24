@@ -12,8 +12,7 @@ $base_animation_duration: 0.7s;
 @import "pushable";
 
 @import "top";
-@import "references";
-@import "profil";
+@import "skills";
 @import "links";
 
 ::-moz-selection {
@@ -97,7 +96,7 @@ canvas {
 .btn-toggle-theme {
   position: fixed;
   z-index: 10;
-  bottom: 20px;
+  top: 20px;
   right: 20px;
   width: 90px;
   height: 50px;
@@ -343,7 +342,7 @@ body.dark-mode {
     }
   }
   .btn-toggle-theme {
-    bottom: 10px;
+    top: 10px;
     right: 10px;
   }
 }

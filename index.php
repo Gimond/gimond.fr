@@ -18,7 +18,7 @@ if (!empty($_COOKIE['theme'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pierre Gimond - Développeur web</title>
   <meta name="title" content="Pierre Gimond - Développeur web" />
-  <meta name="description" content="Je mets à votre service mes <?php echo date('Y') - 2008 ?> ans d'expérience dans le développement web pour confectionner des sites vitrine ou e-commerce clés en main. Vous avez un projet ? Contactez-moi pour en parler." />
+  <meta name="description" content="Pierre Gimond, développeur web spécialiste WordPress &amp; PrestaShop. <?php echo date('Y') - 2008 ?> ans d'expérience dans la conception de sites vitrine et e-commerce." />
 
   <link rel="stylesheet" href="assets/build/css/main.min.css<?php echo ($env == 'dev' ? '?ver=' . time() : '') ?>" />
   <script defer src="assets/build/js/main.min.js<?php echo ($env == 'dev' ? '?ver=' . time() : '') ?>"></script>
@@ -56,32 +56,14 @@ if (!empty($_COOKIE['theme'])) {
       </h1>
       <div class="text-format">
         <p>
-          Développeur web, expert <strong>Wordpress</strong>.
+          Développeur web, spécialiste WordPress &amp; PrestaShop.
         </p>
         <p>
-          Je mets à votre service mes <strong><?php echo date('Y') - 2008 ?> ans</strong> d'expérience dans le développement web pour confectionner des sites vitrine ou e-commerce <strong>clés en main.</strong>
+          <?php echo date('Y') - 2008 ?> ans d'expérience dans la conception de sites vitrine et e-commerce, du thème sur mesure à l'intégration complète.
         </p>
       </div>
 
-      <a class="pushable scrollto" href="#contact">
-        <span class="shadow"></span>
-        <span class="edge"></span>
-        <span class="front">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24" width="28" fill="currentColor">
-            <path d="M16.907 4.44l-7.655 7.655c.227.325.42.676.575 1.048l1.91 4.599 5.17-13.303zm-9.002 6.308l7.656-7.656-13.303 5.17 4.599 1.911a5.51 5.51 0 0 1 1.048.575zm11.618-7.862l-6.027 15.506c-.38.98-1.477 1.483-2.449 1.124a1.831 1.831 0 0 1-1.057-1.017L8.08 13.9a3.662 3.662 0 0 0-1.98-1.98l-4.6-1.91C.546 9.613.11 8.51.528 7.544a1.95 1.95 0 0 1 1.08-1.04L17.114.475a1.852 1.852 0 0 1 2.41 2.41z"></path>
-          </svg>
-          Contactez-moi
-        </span>
-      </a>
-
-    </div>
-  </div>
-
-  <div class="profil">
-    <div class="wrapper">
-      <div class="profil-title">
-        <h2 class="title">Ce que je peux faire <strong>pour vous</strong></h2>
-
+      <div class="actions">
         <a href="cv_pierre_gimond.pdf" target="_blank" class="pushable">
           <span class="shadow"></span>
           <span class="edge"></span>
@@ -93,113 +75,53 @@ if (!empty($_COOKIE['theme'])) {
           </span>
         </a>
 
+        <a class="link-secondary" target="_blank" rel="noopener" href="https://www.linkedin.com/in/pierre-gimond-20802117/">
+          Me retrouver sur LinkedIn
+        </a>
       </div>
-      <div class="profil-text text-format">
-        <h3><strong>Vous avez besoin d'un site ?</strong></h3>
-        <p>
-          En tant que développeur web expérimenté, je crée des sites web performants et fonctionnels, adaptés à vos besoins spécifiques.<br>
-          Je collabore avec votre graphiste ou vous guide dans le choix de thèmes pour garantir un design qui vous corresponde.<br>
-          Mon engagement envers la qualité assure des projets web qui renforcent votre présence en ligne.
-        </p>
-        <h3><strong>Vous êtes une agence web ?</strong></h3>
-        <p>
-          En renfort technique pour vos projets, je propose une expertise avancée en développement web.<br>
-          Maîtrisant WordPress avec Timber, PrestaShop, GIT, Docker, PHP, SASS, HTML5, twig, smarty, webpack, TypeScript, etc... Je garantis des solutions robustes et performantes.<br>
-          Ma méthodologie et mon expérience avec de grandes entreprises font de moi un partenaire idéal pour concrétiser vos projets web les plus exigeants.
-        </p>
+
+    </div>
+  </div>
+
+  <div class="skills">
+    <div class="wrapper">
+      <div class="skills-title">
+        <h2 class="title">Ce que je <strong>maîtrise</strong></h2>
+      </div>
+      <div class="skills-text">
+        <div class="text-format">
+          <p>
+            Je développe des sites robustes et performants, en travaillant au plus près des designers et des équipes projet. Mon terrain de jeu principal : WordPress et PrestaShop, avec une attention particulière à la qualité du code et à la maintenabilité.
+          </p>
+        </div>
+        <?php
+        $stack = [
+          'CMS' => ['WordPress', 'Timber', 'PrestaShop'],
+          'Back' => ['PHP', 'Twig', 'Smarty'],
+          'Front' => ['HTML5', 'SASS', 'TypeScript', 'Webpack'],
+          'Outils' => ['Git', 'Docker'],
+        ];
+        ?>
+        <dl class="stack">
+          <?php foreach ($stack as $category => $items) { ?>
+            <div class="stack-group">
+              <dt><?php echo $category ?></dt>
+              <?php foreach ($items as $item) { ?>
+                <dd><?php echo $item ?></dd>
+              <?php } ?>
+            </div>
+          <?php } ?>
+        </dl>
       </div>
     </div>
   </div>
 
-  <div class="references wrapper">
-    <h2 class="title">Références</h2>
-    <?php
-    $references = [
-      [
-        'Malongo',
-        'malongo.webp',
-        'Lead développeur. Site institutionnel sur Wordpress et boutique sur Prestashop.',
-        'https://www.malongo.com/'
-      ],
-      [
-        'Carambar & co',
-        'carambar.webp',
-        'Lead développeur. Site institutionnel sur Wordpress et boutique sur Prestashop.',
-        'https://www.carambarco.com/'
-      ],
-      [
-        'Librairie Garin',
-        'garin.webp',
-        'Lead développeur. Site institutionnel de librairie sur Wordpress.',
-        'https://www.librairiegarin.fr/'
-      ],
-      [
-        'JLSO',
-        'jlso.webp',
-        'Lead développeur. Site institutionnel d\'agence événementielle.',
-        'https://jlso.fr/'
-      ],
-      [
-        'L\'avant gardiste',
-        'avant_gardiste.webp',
-        'Lead développeur. Boutique de cadeaux originaux sur Prestashop.',
-        'https://www.lavantgardiste.com/'
-      ],
-      [
-        'Fabulous biscuits',
-        'fabulous_biscuits.webp',
-        'Lead développeur. Boutique de biscuits personnalisables sur Prestashop.',
-        'https://www.fabulous-biscuits.com/'
-      ],
-      [
-        'Janod',
-        'janod.webp',
-        'Lead développeur. Boutique de jouets sur Prestashop.',
-        'https://www.janod.com/fr/'
-      ],
-      [
-        'Le passe temps',
-        'passe_temps.webp',
-        'Lead développeur. Boutique de jeux de société sur Prestashop.',
-        'https://www.le-passe-temps.com/'
-      ],
-      [
-        'Radio Ellebore',
-        'ellebore.webp',
-        'Lead développeur. Site institutionnel de radio locale sur Wordpress.',
-        'https://www.radio-ellebore.com/'
-      ],
-      // [
-      //   'Riviera des alpes', 'riviera.webp', 'Lead développeur. Site institutionnel de marque sur Wordpress.'
-      // ],
-    ];
-    ?>
-    <ul>
-      <?php
-      foreach ($references as $ref) {
-        list($name, $image, $desc, $link) = $ref;
-      ?>
-        <li>
-          <a href="<?php echo $link ?>" target="_blank" rel="noopener">
-            <img src="assets/build/img/<?php echo $image ?>" alt="">
-            <div class="text text-format">
-              <h3><?php echo $name ?></h3>
-              <p><?php echo $desc ?></p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                <path fill-rule="evenodd" d="M5 2h2a1 1 0 0 1 .117 1.993L7 4H5a1 1 0 0 0-.993.883L4 5v14a1 1 0 0 0 .883.993L5 20h14a1 1 0 0 0 .993-.883L20 19v-2a1 1 0 0 1 1.993-.117L22 17v2a3 3 0 0 1-2.824 2.995L19 22H5a3 3 0 0 1-2.995-2.824L2 19V5a3 3 0 0 1 2.824-2.995L5 2h2zm16 0 .081.003.12.017.111.03.111.044.098.052.096.067.09.08.097.112.071.11.031.062.034.081.024.076.03.148L22 3v6a1 1 0 0 1-2 0V5.414l-6.293 6.293a1 1 0 0 1-1.32.083l-.094-.083a1 1 0 0 1-.083-1.32l.083-.094L18.584 4H15a1 1 0 0 1 0-2z" />
-              </svg>
-            </div>
-          </a>
-        </li>
-      <?php
-      }
-      ?>
-    </ul>
-  </div>
-
   <div class="links wrapper" id="contact">
     <div class="links-text">
-      <h2 class="title">Un projet <strong>?</strong><br>Des questions <strong>?</strong></h2> Parlons-en.
+      <h2 class="title">Envie d'échanger ?</h2>
+      <div class="text-format">
+        <p>Pour un contact professionnel ou simplement parler dev, je suis joignable ici.</p>
+      </div>
     </div>
     <ul>
       <li>

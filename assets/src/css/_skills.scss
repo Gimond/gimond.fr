@@ -1,4 +1,4 @@
-.profil {
+.skills {
   padding: var(--blocks-margin) 0;
   background: var(--section-background-color);
   text-align: left;
@@ -11,30 +11,48 @@
   }
   &-title {
     min-width: 400px;
-
-    a {
-      margin-top: 50px;
-    }
   }
   &-text {
     padding-left: 60px;
+  }
+}
 
-    p + strong {
-      margin-top: 20px;
+.stack {
+  margin: 40px 0 0;
+
+  &-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+
+    + .stack-group {
+      margin-top: 15px;
     }
+  }
+  dt {
+    width: 80px;
+    font-family: $playfair_font;
+    font-weight: bold;
+    @include rhythm(18, 24);
+  }
+  dd {
+    margin: 0;
+    padding: 6px 14px;
+    border: 2px solid var(--shadow-color);
+    border-radius: 100px;
+    @include rhythm(15, 20);
+    transition: border-color $base_animation_duration;
   }
 }
 
 @include respond-to(medium) {
-  .profil {
+  .skills {
     &-title {
       min-width: 0;
 
       .title {
         margin-bottom: 40px;
-      }
-      .pushable {
-        display: none;
       }
     }
     &-text {
@@ -44,5 +62,8 @@
       width: 100%;
       flex-direction: column;
     }
+  }
+  .stack dt {
+    width: 100%;
   }
 }
