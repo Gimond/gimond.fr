@@ -1,148 +1,133 @@
-import {
-  Polyline,
-  Renderer,
-  Transform,
-  Geometry,
-  Program,
-  Mesh,
-  Vec3,
-  Vec2,
-  Color,
-} from "ogl";
+const COUNT = 20;
+const SPRING = 0.06;
+const FRICTION = 0.85;
+const THICKNESS = 30;
+const REST_DISTANCE = 0.5;
+const COLOR = "#ffffff";
 
 function init() {
-  if (window.matchMedia("(min-width: 992px)").matches) {
-    const vertex = `
-        attribute vec3 position;
-        attribute vec3 next;
-        attribute vec3 prev;
-        attribute vec2 uv;
-        attribute float side;
-  
-        uniform vec2 uResolution;
-        uniform float uDPR;
-        uniform float uThickness;
-  
-        vec4 getPosition() {
-            vec2 aspect = vec2(uResolution.x / uResolution.y, 1);
-            vec2 nextScreen = next.xy * aspect;
-            vec2 prevScreen = prev.xy * aspect;
-  
-            vec2 tangent = normalize(nextScreen - prevScreen);
-            vec2 normal = vec2(-tangent.y, tangent.x);
-            normal /= aspect;
-            normal *= 1.0 - pow(abs(uv.y - 0.5) * 2.0, 2.0);
-  
-            float pixelWidth = 1.0 / (uResolution.y / uDPR);
-            normal *= pixelWidth * uThickness;
-  
-            // When the points are on top of each other, shrink the line to avoid artifacts.
-            float dist = length(nextScreen - prevScreen);
-            normal *= smoothstep(0.0, 0.02, dist);
-  
-            vec4 current = vec4(position, 1);
-            current.xy -= normal * side;
-            return current;
-        }
-  
-        void main() {
-            gl_Position = getPosition();
-        }
-    `;
+  const desktop = window.matchMedia("(min-width: 992px)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    {
-      const renderer = new Renderer({ dpr: 2 });
-      const gl = renderer.gl;
-      document.body.appendChild(gl.canvas);
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  const canvas = document.createElement("canvas");
+  canvas.setAttribute("aria-hidden", "true");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  document.body.appendChild(canvas);
 
-      const scene = new Transform();
+  const points = [];
+  for (let i = 0; i < COUNT; i++) points.push({ x: 0, y: 0 });
+  const mouse = { x: 0, y: 0 };
+  const velocity = { x: 0, y: 0 };
 
-      let polyline;
+  let enabled = false;
+  let started = false;
+  let running = false;
 
-      function resize() {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        if (polyline) polyline.resize();
-      }
-      window.addEventListener("resize", resize, false);
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
 
-      const spring = 0.06;
-      const friction = 0.85;
-      const mouseVelocity = new Vec3();
-
-      // Create an array of Vec3s (eg [[0, 0, 0], ...])
-      const count = 20;
-      const points = [];
-      for (let i = 0; i < count; i++) points.push(new Vec3());
-
-      polyline = new Polyline(gl, {
-        points,
-        vertex,
-        uniforms: {
-          uColor: { value: new Color("#ffffff") },
-          uThickness: { value: 30 },
-        },
-      });
-
-      polyline.mesh.setParent(scene);
-
-      // Call initial resize after creating the polylines
-      resize();
-
-      // Add handlers to get mouse position
-      const mouse = new Vec3();
-      if ("ontouchstart" in window) {
-        window.addEventListener("touchstart", updateMouse, false);
-        window.addEventListener("touchmove", updateMouse, false);
-      } else {
-        window.addEventListener("mousemove", updateMouse, false);
-      }
-
-      function updateMouse(e) {
-        if (e.changedTouches && e.changedTouches.length) {
-          e.x = e.changedTouches[0].pageX;
-          e.y = e.changedTouches[0].pageY;
-        }
-        if (e.x === undefined) {
-          e.x = e.pageX;
-          e.y = e.pageY;
-        }
-
-        // Get mouse value in -1 to 1 range, with y flipped
-        mouse.set(
-          (e.x / gl.renderer.width) * 2 - 1,
-          (e.y / gl.renderer.height) * -2 + 1,
-          0,
-        );
-      }
-
-      const tmp = new Vec3();
-
-      requestAnimationFrame(update);
-      function update(t) {
-        requestAnimationFrame(update);
-
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        // Update polyline input points
-        for (let i = points.length - 1; i >= 0; i--) {
-          if (!i) {
-            // For the first point, spring ease it to the mouse position
-            tmp.copy(mouse).sub(points[i]).multiply(spring);
-            mouseVelocity.add(tmp).multiply(friction);
-            points[i].add(mouseVelocity);
-          } else {
-            // The rest of the points ease to the point in front of them, making a line
-            points[i].lerp(points[i - 1], 0.9);
-          }
-        }
-        polyline.updateGeometry();
-
-        renderer.render({ scene });
-      }
+  function updateEnabled() {
+    enabled = desktop.matches && !reducedMotion.matches;
+    if (!enabled) {
+      started = false;
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     }
   }
+
+  function onPointerMove(e) {
+    if (!enabled) return;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+
+    // First move: start the line on the cursor instead of the corner
+    if (!started) {
+      started = true;
+      points.forEach((p) => {
+        p.x = mouse.x;
+        p.y = mouse.y;
+      });
+    }
+    if (!running) {
+      running = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    // Build both edges of the ribbon, thicker in the middle, thin at both ends
+    const left = [];
+    const right = [];
+    for (let i = 0; i < COUNT; i++) {
+      const prev = points[Math.max(i - 1, 0)];
+      const next = points[Math.min(i + 1, COUNT - 1)];
+      const dx = next.x - prev.x;
+      const dy = next.y - prev.y;
+      const length = Math.hypot(dx, dy);
+      if (!length) continue;
+
+      const taper = 1 - Math.pow(Math.abs(i / (COUNT - 1) - 0.5) * 2, 2);
+      const half = (THICKNESS / 2) * taper * Math.min(length / 10, 1);
+      const nx = (-dy / length) * half;
+      const ny = (dx / length) * half;
+      left.push([points[i].x + nx, points[i].y + ny]);
+      right.push([points[i].x - nx, points[i].y - ny]);
+    }
+    if (left.length < 2) return;
+
+    ctx.beginPath();
+    ctx.moveTo(left[0][0], left[0][1]);
+    left.forEach(([x, y]) => ctx.lineTo(x, y));
+    right.reverse().forEach(([x, y]) => ctx.lineTo(x, y));
+    ctx.closePath();
+    ctx.fillStyle = COLOR;
+    ctx.fill();
+  }
+
+  function update() {
+    if (!enabled) {
+      running = false;
+      return;
+    }
+
+    // The head springs to the mouse, the rest of the points follow the one in front
+    velocity.x = (velocity.x + (mouse.x - points[0].x) * SPRING) * FRICTION;
+    velocity.y = (velocity.y + (mouse.y - points[0].y) * SPRING) * FRICTION;
+    points[0].x += velocity.x;
+    points[0].y += velocity.y;
+    for (let i = COUNT - 1; i > 0; i--) {
+      points[i].x += (points[i - 1].x - points[i].x) * 0.9;
+      points[i].y += (points[i - 1].y - points[i].y) * 0.9;
+    }
+
+    draw();
+
+    // Stop the loop once the whole line has caught up with the cursor
+    const tail = points[COUNT - 1];
+    if (
+      Math.hypot(mouse.x - tail.x, mouse.y - tail.y) < REST_DISTANCE &&
+      Math.hypot(velocity.x, velocity.y) < REST_DISTANCE
+    ) {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      running = false;
+      return;
+    }
+    requestAnimationFrame(update);
+  }
+
+  resize();
+  updateEnabled();
+
+  window.addEventListener("resize", resize);
+  window.addEventListener("pointermove", onPointerMove, { passive: true });
+  desktop.addEventListener("change", updateEnabled);
+  reducedMotion.addEventListener("change", updateEnabled);
 }
 
 export { init };

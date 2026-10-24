@@ -44,6 +44,21 @@
     @include rhythm(15, 20);
     transition: border-color $base_animation_duration;
   }
+
+  &.reveal dd {
+    opacity: 0;
+    transform: translateY(15px) scale(0.9);
+    transition:
+      border-color $base_animation_duration,
+      opacity 0.5s $ease_out_quart,
+      transform 0.5s $ease_out_back;
+  }
+  &.reveal.is-visible dd {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s, calc(var(--reveal-index) * 60ms),
+      calc(var(--reveal-index) * 60ms);
+  }
 }
 
 @include respond-to(medium) {

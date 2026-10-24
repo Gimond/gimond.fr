@@ -1,6 +1,4 @@
 <?php
-$env = $_SERVER['HTTP_HOST'] == 'localhost' ? 'dev' : 'prod';
-
 $themeClass = 'no-theme';
 if (!empty($_COOKIE['theme'])) {
   if ($_COOKIE['theme'] == 'dark') {
@@ -20,8 +18,8 @@ if (!empty($_COOKIE['theme'])) {
   <meta name="title" content="Pierre Gimond - Développeur web" />
   <meta name="description" content="Pierre Gimond, développeur web spécialiste WordPress &amp; PrestaShop. <?php echo date('Y') - 2008 ?> ans d'expérience dans la conception de sites vitrine et e-commerce." />
 
-  <link rel="stylesheet" href="assets/build/css/main.min.css<?php echo ($env == 'dev' ? '?ver=' . time() : '') ?>" />
-  <script defer src="assets/build/js/main.min.js<?php echo ($env == 'dev' ? '?ver=' . time() : '') ?>"></script>
+  <link rel="stylesheet" href="assets/build/css/main.min.css?ver=<?php echo filemtime(__DIR__ . '/assets/build/css/main.min.css') ?>" />
+  <script defer src="assets/build/js/main.min.js?ver=<?php echo filemtime(__DIR__ . '/assets/build/js/main.min.js') ?>"></script>
 
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
@@ -38,7 +36,9 @@ if (!empty($_COOKIE['theme'])) {
   <div class="top wrapper">
     <div class="image">
       <svg preserveaspectratio="none" overflow="visible" viewBox="0 0 100 50" width="100" height="50">
-        <path id="curve" fill="transparent" d="M 0 0 C 10 0 90 0 100 0" />
+        <path id="curve" fill="transparent" d="M 0 0 C 10 0 90 0 100 0">
+          <animate attributeName="d" values="M 0 0 C 10 0 90 0 100 0;M 0 0 C 0 50 100 50 100 0" dur="0.7s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.165 0.84 0.44 1" />
+        </path>
         <text width="100">
           <textPath text-anchor="middle" startOffset="50%" xlink:href="#curve">
             Bonjour !

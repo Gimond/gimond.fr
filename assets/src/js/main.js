@@ -18,9 +18,37 @@ Promise.all([
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         document.body.classList.add("fontsLoaded");
+
+        // The "Bonjour !" arc is an SVG animation: CSS `d` transitions don't work in Safari
+        const arc = document.querySelector(".image animate");
+        if (arc) setTimeout(() => arc.beginElement(), 700);
       });
     });
   });
+
+// Skills badges appear one after the other when the stack scrolls into view
+const stack = document.querySelector(".stack");
+if (
+  stack &&
+  "IntersectionObserver" in window &&
+  !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+) {
+  stack.querySelectorAll("dd").forEach((badge, index) => {
+    badge.style.setProperty("--reveal-index", index);
+  });
+  stack.classList.add("reveal");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        stack.classList.add("is-visible");
+        observer.disconnect();
+      }
+    },
+    { threshold: 0.3 },
+  );
+  observer.observe(stack);
+}
 
 // Scroll to
 const scrollto_links = document.querySelectorAll(".scrollto");
