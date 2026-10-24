@@ -1,0 +1,48 @@
+.profil {
+  padding: var(--blocks-margin) 0;
+  background: var(--section-background-color);
+  text-align: left;
+  transition: background-color $base_animation_duration;
+
+  .wrapper {
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-title {
+    min-width: 400px;
+
+    a {
+      margin-top: 50px;
+    }
+  }
+  &-text {
+    padding-left: 60px;
+
+    p + strong {
+      margin-top: 20px;
+    }
+  }
+}
+
+@include respond-to(medium) {
+  .profil {
+    &-title {
+      min-width: 0;
+
+      .title {
+        margin-bottom: 40px;
+      }
+      .pushable {
+        display: none;
+      }
+    }
+    &-text {
+      padding-left: 0;
+    }
+    .wrapper {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
+}

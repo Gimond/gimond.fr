@@ -1,0 +1,13 @@
+body {
+    text-align: center;
+}
+
+.title {
+    text-shadow: 
+        /* 3px 3px 0 rgb(255 0 255 / 0.3), 
+        -3px 0px 0 rgb(255 255 0 / 0.4),  */
+        7px 0 0 rgba(49, 130, 206, 0.4);
+}
+.face {
+    
+}

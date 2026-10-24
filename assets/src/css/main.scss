@@ -1,0 +1,349 @@
+@import "normalize";
+@import "mixins";
+@import "breakpoints";
+
+$ease_out_back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+$ease_out_quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+// $base_animation_duration: 0.6s;
+$base_animation_duration: 0.7s;
+
+@import "fonts";
+
+@import "pushable";
+
+@import "top";
+@import "references";
+@import "profil";
+@import "links";
+
+::-moz-selection {
+  /* Code for Firefox */
+  color: white;
+  background: var(--accent-color);
+}
+::selection {
+  color: white;
+  background: var(--accent-color);
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  --blocks-margin: 100px;
+
+  --background-color: #fff;
+  --section-background-color: rgba(231, 231, 231, 0.6);
+  --text-color: #333;
+  --accent-color: #f62939;
+  // --shadow-color: rgb(153, 183, 209);
+  --shadow-color: rgba(105, 157, 204, 0.67);
+
+  position: relative;
+  height: 100%;
+  color: var(--text-color);
+  text-align: center;
+  font-family: $roboto_font;
+  transition: color 0.5s;
+  padding-bottom: 150px;
+}
+
+.wrapper {
+  width: 1200px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+canvas {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.04;
+}
+.background {
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  height: 100lvh;
+  z-index: -2;
+  background-color: var(--background-color);
+  transition: background-color 0.5s;
+  box-shadow: 0 0 200px rgba(0, 0, 0, 0.9) inset;
+
+  img {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    transition: opacity 0.5s;
+
+    &.dark {
+      opacity: 0;
+    }
+  }
+}
+
+.btn-toggle-theme {
+  position: fixed;
+  z-index: 10;
+  bottom: 20px;
+  right: 20px;
+  width: 90px;
+  height: 50px;
+  border-radius: 100px;
+  background: #5891c2;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background-color 0.5s;
+
+  &:before,
+  &:after {
+    display: block;
+    position: absolute;
+    content: "";
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    top: 7px;
+    left: 7px;
+    transition: 0.5s ease;
+  }
+  &:before {
+    background-color: #ffcc56;
+  }
+
+  &:after {
+    background-color: #5891c2;
+    top: 0;
+    left: -29px;
+    transform: scale(0.00001);
+  }
+}
+
+.title {
+  font-family: $playfair_font;
+  @include rhythm(40, 52);
+  font-weight: bold;
+  margin: 0 0 20px;
+
+  strong {
+    font-family: $playfair_font;
+    text-shadow: 0 0 0 var(--shadow-color);
+    transition: text-shadow $base_animation_duration;
+  }
+}
+.text-format {
+  @include rhythm(18, 24);
+
+  p {
+    margin: 10px 0;
+  }
+  strong {
+    position: relative;
+    z-index: 1;
+    @include rhythm(22, 17);
+    font-family: $playfair_font;
+    white-space: nowrap;
+
+    &::before {
+      position: absolute;
+      z-index: -1;
+      top: 7px;
+      left: -3px;
+      transform: rotate(-2deg);
+      width: calc(100% + 6px);
+      height: 70%;
+      background: var(--shadow-color);
+      transition: background-color $base_animation_duration;
+      content: "";
+    }
+  }
+  > * {
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+.button {
+  display: inline-block;
+  background: var(--accent-color);
+  color: #fff;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  @include rhythm(16, 22);
+  font-family: $roboto_font;
+  text-decoration: none;
+  cursor: pointer;
+
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+body.fontsLoaded {
+  .image {
+    transform: translateX(0);
+    opacity: 1;
+    text-shadow: 7px 0 0 var(--shadow-color);
+
+    svg {
+      transform: translate(0, 30%);
+    }
+    path {
+      // d: path("M 25 100 C 25 50 75 50 75 100");
+      d: path("M 0 0 C 0 50 100 50 100 0");
+    }
+    text {
+      letter-spacing: 1px;
+    }
+    .face {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+
+  .text {
+    > * {
+      opacity: 1;
+      transform: translateX(0);
+
+      @for $i from 1 through 4 {
+        &:nth-child(#{$i}) {
+          transition-delay: #{$base_animation_duration + ($i * 0.05)};
+        }
+      }
+    }
+  }
+  .title strong {
+    text-shadow: 4px 0 0 var(--shadow-color);
+  }
+}
+
+.characters {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 75px;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+
+  > * {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+  }
+  &-wolf {
+    transform: translate(-50%, 100%);
+    transition: transform 0.5s 0s;
+  }
+  &-man {
+    transform: translate(-50%, 0);
+    transition: transform 0.5s 0.3s;
+  }
+}
+
+// dark mode
+@mixin dark-mode {
+  --background-color: #111;
+  --text-color: #ededed;
+  --shadow-color: rgb(124, 23, 226);
+  --section-background-color: rgba(54, 32, 76, 0.5);
+
+  .btn-toggle-theme {
+    background: #510999;
+
+    &:before {
+      background-color: #e5e5d5;
+      transform: translateX(40px);
+    }
+    &:after {
+      background: #510999;
+      transform: translateX(60px) scale(0.9);
+    }
+  }
+  canvas {
+    opacity: 0.07;
+  }
+  .background {
+    img.dark {
+      opacity: 0.3;
+    }
+    img.light {
+      opacity: 0;
+    }
+  }
+  .characters {
+    &-wolf {
+      transform: translate(-50%, 0);
+      transition: transform 0.5s 0.3s;
+    }
+    &-man {
+      transform: translate(-50%, 100%);
+      transition: transform 0.5s 0s;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not(.light-mode) {
+    @include dark-mode;
+  }
+}
+body.dark-mode {
+  @include dark-mode;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@include respond-to(medium) {
+  body {
+    --blocks-margin: 40px;
+  }
+  .wrapper {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .title {
+    @include rhythm(34, 42);
+  }
+  .text-format {
+    @include rhythm(16, 22);
+
+    strong {
+      @include rhythm(18, 17);
+    }
+  }
+  .btn-toggle-theme {
+    bottom: 10px;
+    right: 10px;
+  }
+}

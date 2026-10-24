@@ -1,0 +1,44 @@
+.links {
+  margin: var(--blocks-margin) 0 0;
+  // display: flex;
+  // justify-content: space-between;
+  // text-align: left;
+  // align-items: center;
+
+  &.wrapper {
+    width: 800px;
+  }
+  h2 {
+  }
+  a {
+    display: block;
+    color: var(--text-color);
+    width: 80px;
+    height: 80px;
+    transform: scale(1);
+    transition:
+      color 0.3s,
+      transform 0.5s $ease_out_back;
+
+    path {
+      fill: currentColor;
+    }
+    &:hover {
+      color: var(--accent-color);
+      transform: scale(1.2);
+    }
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+
+    li + li {
+      padding-left: 20px;
+    }
+  }
+}
